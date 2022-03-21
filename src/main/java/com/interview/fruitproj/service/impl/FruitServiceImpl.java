@@ -22,11 +22,13 @@ public class FruitServiceImpl implements FruitService {
     @Override
     public BigDecimal calcSumByFruitName(String name) {
 
-        if (fruitRepository.getFruitsByName(name).isEmpty()) {
+        List<FruitBasket> fruitBaskets = fruitRepository.getFruitsByName(name);
+
+        if (fruitBaskets.isEmpty()) {
             throw new FruitTypeNotFoundException("Fruit not found");
         }
 
-        return fruitRepository.getFruitsByName(name).stream()
+        return fruitBaskets.stream()
                 .map(fruit->fruit.getPrice().multiply(new BigDecimal(fruit.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }

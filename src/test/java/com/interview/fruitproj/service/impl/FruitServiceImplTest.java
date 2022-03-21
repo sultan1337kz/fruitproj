@@ -68,4 +68,20 @@ class FruitServiceImplTest {
         when(fruitRepository.getAllFruits()).thenReturn(fruits);
         assertEquals(fruits,fruitServiceImpl.getAllFruits());
     }
+
+    @Test
+    void calcSumNullCheck() {
+
+        final String fruitName = null;
+        BigDecimal sum = fruits.stream()
+                .filter(x -> x.getName().equals(fruitName))
+                .map(fruit->fruit.getPrice().multiply(new BigDecimal(fruit.getQuantity())))
+                .reduce(BigDecimal.ZERO,BigDecimal::add);
+        when(fruitRepository.getFruitsByName(fruitName)).thenReturn(fruits.stream().
+                filter(x->x.getName().equals(fruitName))
+                .collect(Collectors.toList()));
+
+        assertEquals(sum,fruitServiceImpl.calcSumByFruitName(fruitName));
+
+    }
 }
